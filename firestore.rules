@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net: Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isRole(role) {
+      return isSignedIn() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == role;
+    }
+
+    function isAdmin() {
+      return isRole("ADMIN") || (isSignedIn() && request.auth.token.email == "alibuyukuyar268@gmail.com");
+    }
+
+    // 3. User Profiles Collection
+    match /users/{userId} {
+      allow read: if true; // Allow anyone (including guests) to read profiles to browse companies
+      allow create: if request.auth != null && request.resource.data.id == userId;
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // 4. Moving Requests Collection
+    match /moving_requests/{requestId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // 5. Offers Collection
+    match /offers/{offerId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 6. Reviews Collection
+    match /reviews/{reviewId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 7. Notifications Collection
+    match /notifications/{notificationId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 8. Chats Collection
+    match /chats/{chatId} {
+      allow read, write: if isSignedIn();
+
+      // Messages Subcollection
+      match /messages/{messageId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+
+    // 9. Complaints Collection
+    match /complaints/{complaintId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 10. Announcements Collection
+    match /announcements/{announcementId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // 11. Global Settings Collection
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 11b. Blog Posts Collection
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 12. Cities Collection
+    match /cities/{cityId} {
+      allow read, write: if true;
+    }
+
+    // 13. Quick Bid Templates Collection
+    match /quick_bid_templates/{templateId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

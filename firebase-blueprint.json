@@ -1,0 +1,295 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing authentication details, roles, and moving company specific data.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["CUSTOMER", "MOVING_COMPANY", "ADMIN"] },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "avatarUrl": { "type": "string" },
+        "companyLogo": { "type": "string" },
+        "description": { "type": "string" },
+        "taxNumber": { "type": "string" },
+        "taxOffice": { "type": "string" },
+        "driversCount": { "type": "number" },
+        "hasInsurance": { "type": "boolean" },
+        "isApproved": { "type": "boolean" },
+        "verificationBadge": { "type": "boolean" },
+        "ratingsCount": { "type": "number" },
+        "averageRating": { "type": "number" },
+        "completedJobs": { "type": "number" }
+      },
+      "required": ["id", "email", "role", "name", "createdAt"]
+    },
+    "MovingRequest": {
+      "title": "MovingRequest",
+      "description": "A customer request for moving items from one location to another.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "pickupAddress": { "type": "string" },
+        "destinationAddress": { "type": "string" },
+        "pickupFloor": { "type": "number" },
+        "destinationFloor": { "type": "number" },
+        "hasElevatorPickup": { "type": "boolean" },
+        "hasElevatorDestination": { "type": "boolean" },
+        "estimatedDate": { "type": "string" },
+        "preferredTime": { "type": "string" },
+        "houseType": { "type": "string" },
+        "roomCount": { "type": "string" },
+        "fragileItems": { "type": "string" },
+        "whiteGoods": { "type": "string" },
+        "hasPiano": { "type": "boolean" },
+        "hasSafe": { "type": "boolean" },
+        "boxesCount": { "type": "number" },
+        "assemblyRequired": { "type": "boolean" },
+        "disassemblyRequired": { "type": "boolean" },
+        "packingRequired": { "type": "boolean" },
+        "storageRequired": { "type": "boolean" },
+        "additionalNotes": { "type": "string" },
+        "visibility": { "type": "string", "enum": ["PUBLIC", "PRIVATE"] },
+        "status": { "type": "string", "enum": ["PENDING", "OFFER_ACCEPTED", "COMPLETED", "CANCELLED"] },
+        "acceptedOfferId": { "type": "string" },
+        "acceptedCompanyId": { "type": "string" },
+        "acceptedCompanyName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "offersCount": { "type": "number" }
+      },
+      "required": ["id", "customerId", "customerName", "pickupAddress", "destinationAddress", "estimatedDate", "houseType", "status", "createdAt"]
+    },
+    "Offer": {
+      "title": "Offer",
+      "description": "An offer made by a moving company for a moving request.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "requestId": { "type": "string" },
+        "companyId": { "type": "string" },
+        "companyName": { "type": "string" },
+        "companyLogo": { "type": "string" },
+        "companyRating": { "type": "number" },
+        "price": { "type": "number" },
+        "estimatedDurationDays": { "type": "number" },
+        "availableDate": { "type": "string" },
+        "notes": { "type": "string" },
+        "validityPeriodDays": { "type": "number" },
+        "vehicleType": { "type": "string" },
+        "assignedStaffCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "requestId", "companyId", "companyName", "price", "availableDate", "status", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review written by a customer about a moving company's service.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "requestId": { "type": "string" },
+        "reviewerId": { "type": "string" },
+        "reviewerName": { "type": "string" },
+        "targetId": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "reviewerRole": { "type": "string", "enum": ["CUSTOMER", "MOVING_COMPANY"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "requestId", "reviewerId", "reviewerName", "targetId", "rating", "comment", "reviewerRole", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A real-time notification sent to a specific user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "type": { "type": "string", "enum": ["OFFER_RECEIVED", "OFFER_ACCEPTED", "NEW_MESSAGE", "REVIEW_REMINDER", "SYSTEM_UPDATE"] },
+        "requestId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "body", "type", "read", "createdAt"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "A chat session between a customer and a company for a moving request.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "requestId": { "type": "string" },
+        "requestTitle": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "companyId": { "type": "string" },
+        "companyName": { "type": "string" },
+        "lastMessageText": { "type": "string" },
+        "lastMessageTime": { "type": "string", "format": "date-time" },
+        "unreadCountCustomer": { "type": "number" },
+        "unreadCountCompany": { "type": "number" }
+      },
+      "required": ["id", "requestId", "requestTitle", "customerId", "customerName", "companyId", "companyName", "lastMessageTime"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "An individual chat message within a chat session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "chatId", "senderId", "senderName", "text", "read", "createdAt"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "A complaint or dispute filed by a user about an operation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reporterId": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "reportedId": { "type": "string" },
+        "reportedName": { "type": "string" },
+        "reason": { "type": "string" },
+        "details": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "RESOLVED", "REJECTED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "reporterId", "reporterName", "reportedName", "reason", "details", "status", "createdAt"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "An announcement posted by the platform administrators.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "target": { "type": "string", "enum": ["ALL", "CUSTOMERS", "COMPANIES"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "content", "target", "createdAt"]
+    },
+    "BlogPost": {
+      "title": "BlogPost",
+      "description": "A blog post written by a platform administrator.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "tag", "title", "content", "createdAt"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global customizer settings for the look, feel, and branding of the platform.",
+      "type": "object",
+      "properties": {
+        "appName": { "type": "string" },
+        "appSlogan": { "type": "string" },
+        "heroTitle": { "type": "string" },
+        "heroDescription": { "type": "string" },
+        "heroBadgeText": { "type": "string" },
+        "footerDescription": { "type": "string" },
+        "logoType": { "type": "string", "enum": ["duck", "custom_url"] },
+        "customLogoUrl": { "type": "string" },
+        "primaryColor": { "type": "string" },
+        "accentColor": { "type": "string" },
+        "menuHomeText": { "type": "string" },
+        "menuDiscoverText": { "type": "string" },
+        "menuCreateRequestText": { "type": "string" },
+        "menuDashboardText": { "type": "string" },
+        "menuChatsText": { "type": "string" },
+        "menuProfileText": { "type": "string" }
+      },
+      "required": ["appName", "appSlogan", "heroTitle", "heroDescription", "heroBadgeText", "footerDescription", "logoType", "customLogoUrl", "primaryColor", "accentColor", "menuHomeText", "menuDiscoverText", "menuCreateRequestText", "menuDashboardText", "menuChatsText", "menuProfileText"]
+    },
+    "QuickBidTemplate": {
+      "title": "QuickBidTemplate",
+      "description": "A predefined bid template consisting of standard price, duration, staff count, vehicle type, and notes for quick bidding.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "companyId": { "type": "string" },
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "estDurationDays": { "type": "number" },
+        "assignedStaff": { "type": "number" },
+        "vehicleType": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "companyId", "title", "price", "estDurationDays", "assignedStaff", "vehicleType", "notes", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/quick_bid_templates/{templateId}": {
+      "schema": "QuickBidTemplate",
+      "description": "Collection of predefined quick bid templates for carrier companies."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of all system users, including customers, companies, and admins."
+    },
+    "/moving_requests/{requestId}": {
+      "schema": "MovingRequest",
+      "description": "Collection of moving requests posted by customers."
+    },
+    "/offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Collection of offers submitted by moving companies."
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Collection of service reviews written about companies."
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Collection of notifications for users."
+    },
+    "/chats/{chatId}": {
+      "schema": "ChatSession",
+      "description": "Collection of chat threads."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Subcollection of chat messages."
+    },
+    "/complaints/{complaintId}": {
+      "schema": "Complaint",
+      "description": "Collection of complaints filed by users."
+    },
+    "/announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "Collection of public or role-specific announcements."
+    },
+    "/settings/{settingId}": {
+      "schema": "SiteSettings",
+      "description": "Collection of global platform settings and configurations."
+    },
+    "/blogs/{blogId}": {
+      "schema": "BlogPost",
+      "description": "Collection of blog posts managed by administrators."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "NakNak-Nakliye",
+  "description": "Müşterilerle profesyonel nakliye firmalarını buluşturan, teklif usulü çalışan evden eve nakliyat platformu.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
