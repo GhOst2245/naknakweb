@@ -2,37 +2,50 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, memoryLocalCache, getFirestore } from "firebase/firestore";
 
+// Import the functions you need from the SDKs you need
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCA9s1Qs18oCtK8eHX4ktyNxa3IejzHZ1o",
-  authDomain: "handy-attic-gzp7b.firebaseapp.com",
-  projectId: "handy-attic-gzp7b",
-  storageBucket: "handy-attic-gzp7b.firebasestorage.app",
-  messagingSenderId: "561914441097",
-  appId: "1:561914441097:web:86f71f061bb1681a83c558"
+  apiKey: "AIzaSyA3WaidSotTtX2ZOseCDRL_LsYLWFsHWz0",
+  authDomain: "naknak-543dd.firebaseapp.com",
+  projectId: "naknak-543dd",
+  storageBucket: "naknak-543dd.firebasestorage.app",
+  messagingSenderId: "41856255174",
+  appId: "1:41856255174:web:1fca7937a5991bc2fe43c7",
+  measurementId: "G-JPB03MWPNZ"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+
+
+
 // Initialize Firestore with custom database ID and offline persistent cache with memory fallback to avoid BloomFilter/IndexedDB errors in iframe sandbox environments
 let dbInstance;
 try {
-  dbInstance = initializeFirestore(app, {
-    localCache: persistentLocalCache({
-      tabManager: persistentMultipleTabManager()
-    }),
-    experimentalForceLongPolling: true
-  }, "ai-studio-nakliyepazaryeri-65b7d6e2-65ae-481a-bddd-10e46147ddf7");
+dbInstance = initializeFirestore(app, {
+  localCache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager()
+  }),
+  experimentalForceLongPolling: true
+});
 } catch (error) {
   console.warn("Persistent cache initialization failed, falling back to memory cache:", error);
   try {
-    dbInstance = initializeFirestore(app, {
-      localCache: memoryLocalCache(),
-      experimentalForceLongPolling: true
-    }, "ai-studio-nakliyepazaryeri-65b7d6e2-65ae-481a-bddd-10e46147ddf7");
+dbInstance = initializeFirestore(app, {
+  localCache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager()
+  }),
+  experimentalForceLongPolling: true
+});
   } catch (innerError) {
     console.error("Firestore memory cache initialization also failed:", innerError);
-    dbInstance = getFirestore(app, "ai-studio-nakliyepazaryeri-65b7d6e2-65ae-481a-bddd-10e46147ddf7");
+    dbInstance = getFirestore(app);
   }
 }
 
